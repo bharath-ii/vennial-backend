@@ -35,71 +35,240 @@ app.get('/privacy', (req, res) => {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy - Find a Part (FAP)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #f9f9f9; }
-        .container { background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        h1 { color: #00b894; border-bottom: 2px solid #00b894; padding-bottom: 10px; }
-        h2 { color: #2d3436; margin-top: 24px; }
-        ul { padding-left: 20px; }
-        li { margin-bottom: 8px; }
-        .contact { background: #e6f7f4; padding: 15px; border-radius: 8px; border-left: 4px solid #00b894; margin-top: 20px; }
-        footer { margin-top: 30px; font-size: 0.9em; color: #777; text-align: center; }
+        :root {
+            --primary: #00b894;
+            --primary-dark: #00997b;
+            --primary-light: #e6f7f4;
+            --text-main: #2d3436;
+            --text-muted: #636e72;
+            --bg-page: #f8fafc;
+            --bg-card: #ffffff;
+            --border-color: #e2e8f0;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.75;
+            color: var(--text-main);
+            background-color: var(--bg-page);
+            padding: 40px 20px;
+        }
+        .wrapper {
+            max-width: 860px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            padding: 48px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+        }
+        .header {
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 24px;
+            margin-bottom: 36px;
+        }
+        .brand-badge {
+            display: inline-block;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            font-weight: 700;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+        }
+        h1 {
+            color: #1e293b;
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+        .meta-info {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+        h2 {
+            color: #1e293b;
+            font-size: 20px;
+            font-weight: 700;
+            margin-top: 36px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        h2::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 20px;
+            background-color: var(--primary);
+            border-radius: 2px;
+        }
+        p {
+            margin-bottom: 16px;
+            color: #475569;
+            font-size: 15px;
+        }
+        ul {
+            margin-bottom: 20px;
+            padding-left: 24px;
+        }
+        li {
+            margin-bottom: 10px;
+            color: #475569;
+            font-size: 15px;
+        }
+        li strong {
+            color: #1e293b;
+        }
+        .highlight-box {
+            background-color: var(--primary-light);
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 24px 0;
+        }
+        .highlight-box p {
+            margin-bottom: 0;
+            color: #0f766e;
+            font-weight: 500;
+        }
+        .contact-card {
+            background-color: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 32px;
+        }
+        .contact-card h3 {
+            font-size: 18px;
+            color: #0f172a;
+            margin-bottom: 12px;
+        }
+        .contact-card p {
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        a {
+            color: var(--primary-dark);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        footer {
+            margin-top: 48px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        @media (max-width: 640px) {
+            body { padding: 16px; }
+            .wrapper { padding: 24px; border-radius: 14px; }
+            h1 { font-size: 24px; }
+            h2 { font-size: 18px; }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Privacy Policy for Find a Part (FAP)</h1>
-        <p><strong>Effective Date:</strong> July 24, 2026</p>
-        <p><strong>Find a Part (FAP)</strong> ("we", "our", or "us"), a product of <strong>Vennila Accessories</strong>, is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application.</p>
+    <div class="wrapper">
+        <div class="header">
+            <span class="brand-badge">Official Policy</span>
+            <h1>Privacy Policy</h1>
+            <p class="meta-info"><strong>Application:</strong> Find a Part (FAP) &bull; <strong>Publisher:</strong> Vennila Accessories &bull; <strong>Last Updated:</strong> July 24, 2026</p>
+        </div>
+
+        <p>Welcome to <strong>Find a Part (FAP)</strong> ("the App"), operated by <strong>Vennila Accessories</strong> ("we", "us", or "our"). We respect your privacy and are committed to protecting the personal data of all users, mobile repair technicians, and spare parts retailers who utilize our service.</p>
+
+        <p>This Privacy Policy outlines how we collect, use, store, process, and protect your information when you download, register, or use the <strong>Find a Part (FAP)</strong> mobile application available on the Google Play Store.</p>
+
+        <div class="highlight-box">
+            <p>🔒 <strong>Zero Ads & Zero Data Selling:</strong> Find a Part (FAP) is completely ad-free. We do not track advertising identifiers, show banner or interstitial ads, or sell user data to third parties.</p>
+        </div>
 
         <h2>1. Information We Collect</h2>
-        <p>When you register and use Find a Part (FAP), we may collect the following personal information:</p>
+        <p>We collect only the minimum necessary information required to operate account authentication and compatibility search services efficiently:</p>
         <ul>
-            <li><strong>Personal Identification:</strong> Full Name, Email Address, Phone Number, and Shop Name.</li>
-            <li><strong>Google Profile Info:</strong> If you sign in via Google, we collect your Google Name, Email Address, and Profile Picture.</li>
-            <li><strong>Device & Usage Information:</strong> Search history within the app to display compatible device accessories.</li>
+            <li><strong>Account Registration Information:</strong> When creating an account, we collect your Full Name, Email Address, Phone Number, and Shop Name.</li>
+            <li><strong>Google Authentication (OAuth 2.0):</strong> If you choose to register or sign in via Google Sign-In, we collect your Google Display Name, Email Address, and Profile Picture URL to populate your user profile.</li>
+            <li><strong>Enquiry & Support Requests:</strong> Information submitted when you use the in-app Enquiry feature to request compatibility data for missing device models.</li>
+            <li><strong>Technical & App State Data:</strong> Session authentication tokens stored locally on your device via AsyncStorage to keep you logged in securely.</li>
         </ul>
 
         <h2>2. How We Use Your Information</h2>
-        <p>We use the collected information for the following purposes:</p>
+        <p>Your information is processed strictly for legitimate business and operational purposes:</p>
         <ul>
-            <li>To create and manage your user account.</li>
-            <li>To provide mobile spare parts compatibility search services.</li>
-            <li>To send important app updates and notifications.</li>
-            <li>To respond to user inquiries and support requests.</li>
+            <li><strong>Account Provisioning & Security:</strong> To verify user identity, process login requests, and secure access to app features.</li>
+            <li><strong>Accessory Compatibility Services:</strong> To deliver instant search results for screen guards, display combos, frames, batteries, CC boards, volume strips, and back cases.</li>
+            <li><strong>In-App Notifications:</strong> To inform users of platform updates, new device additions, and feature releases.</li>
+            <li><strong>Customer Support & Data Verification:</strong> To review submitted model enquiries and respond to user feedback.</li>
+            <li><strong>Subscription Management:</strong> To manage Pro and Premium tier access.</li>
         </ul>
 
-        <h2>3. Advertisements & Data Selling</h2>
-        <p><strong>Find a Part (FAP) is completely ad-free.</strong> We do not display third-party advertisements, we do not track advertising identifiers, and we <strong>NEVER sell, rent, or trade your personal data</strong> to third parties.</p>
-
-        <h2>4. Third-Party Services</h2>
-        <p>We utilize trusted third-party service providers solely to operate our app:</p>
+        <h2>3. Third-Party Service Providers</h2>
+        <p>We partner with trusted industry-standard infrastructure providers to deliver our services. These providers have access to user data only to perform specific tasks on our behalf and are obligated not to disclose or use it for any other purpose:</p>
         <ul>
-            <li><strong>Firebase (Google Cloud):</strong> For secure authentication and database storage.</li>
-            <li><strong>Google Play Billing & RevenueCat:</strong> For secure in-app subscription processing. We do not store or handle any credit/debit card information.</li>
+            <li><strong>Firebase (Google Cloud Platform):</strong> Provides secure user authentication services (Firebase Auth) and cloud database storage (Firestore). Data is encrypted in transit and at rest on Google Cloud infrastructure.</li>
+            <li><strong>Google Play Billing & RevenueCat:</strong> Manages in-app purchases and subscription entitlements. Financial details (credit/debit cards) are handled directly by Google Play Store. We do not collect or store financial payment details on our servers.</li>
         </ul>
 
-        <h2>5. Data Security & Storage</h2>
-        <p>Your information is stored securely on encrypted Google Cloud / Firebase servers. We implement appropriate administrative, technical, and physical security measures to protect your personal data from unauthorized access or disclosure.</p>
+        <h2>4. Data Security & Storage Standards</h2>
+        <p>We implement stringent security protocols to safeguard your personal data against unauthorized access, alteration, disclosure, or destruction:</p>
+        <ul>
+            <li>All communication between the App and backend servers is encrypted using <strong>HTTPS (TLS 1.3 / SSL)</strong>.</li>
+            <li>Passwords are hashed using industry-standard <strong>bcrypt cryptographic hashing</strong> before storage.</li>
+            <li>Database assets are safeguarded using granular Firebase Security Rules.</li>
+        </ul>
+
+        <h2>5. Data Retention Policy</h2>
+        <p>We retain your personal data for as long as your account remains active or as needed to provide you with access to FAP services. If you choose to delete your account, your personal identification records will be permanently removed from our active databases within 30 business days.</p>
 
         <h2>6. Account & Data Deletion Requests</h2>
-        <p>You have the right to request the deletion of your account and associated personal data at any time. To request data deletion, please contact us at <a href="mailto:exceptionz13@gmail.com">exceptionz13@gmail.com</a> with your registered email address.</p>
+        <p>Users have the right to request full deletion of their account and all associated personal data at any time. To submit a data deletion request:</p>
+        <p>Send an email to <a href="mailto:exceptionz13@gmail.com">exceptionz13@gmail.com</a> with the subject line <code>"Account Deletion Request"</code> from your registered email address. We will verify your identity and confirm deletion within 30 days.</p>
 
-        <h2>7. Contact Us</h2>
-        <div class="contact">
-            <p>If you have any questions or concerns about this Privacy Policy, please contact us:</p>
-            <p><strong>Email:</strong> exceptionz13@gmail.com</p>
-            <p><strong>Company:</strong> Vennila Accessories</p>
-            <p><strong>Location:</strong> Tamil Nadu, India</p>
+        <h2>7. Children's Privacy Protection</h2>
+        <p>Find a Part (FAP) is designed for professional mobile repair technicians and retailers. The App is not intended for use by children under 13 years of age. We do not knowingly collect personal information from children. If we discover a child under 13 has provided personal data, we will delete it immediately.</p>
+
+        <h2>8. User Rights & Data Protection</h2>
+        <p>Depending on your jurisdiction, you possess the following rights regarding your personal information:</p>
+        <ul>
+            <li><strong>Right to Access:</strong> Request a copy of the personal data we store about you.</li>
+            <li><strong>Right to Rectification:</strong> Request correction of incorrect or incomplete personal profile details.</li>
+            <li><strong>Right to Erasure:</strong> Request permanent removal of your account and personal records.</li>
+        </ul>
+
+        <h2>9. Updates to This Privacy Policy</h2>
+        <p>We may update this Privacy Policy from time to time to reflect changes in legal requirements or app features. Any changes will be posted on this page with an updated "Last Updated" date. Significant updates will be communicated through in-app notifications.</p>
+
+        <div class="contact-card">
+            <h3>Contact Information</h3>
+            <p>For any questions, legal inquiries, or data privacy requests regarding Find a Part (FAP), please contact us at:</p>
+            <p><strong>Email:</strong> <a href="mailto:exceptionz13@gmail.com">exceptionz13@gmail.com</a></p>
+            <p><strong>Brand / Publisher:</strong> Vennila Accessories</p>
+            <p><strong>Headquarters:</strong> Tamil Nadu, India</p>
         </div>
+
         <footer>
-            &copy; 2026 Find a Part (FAP) — A product of Vennila Accessories. All rights reserved.
+            &copy; 2026 Find a Part (FAP) &bull; A product of Vennila Accessories. All rights reserved.
         </footer>
     </div>
 </body>
 </html>
     `);
 });
+
 
 
 // Routes
