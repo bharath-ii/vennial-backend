@@ -134,10 +134,29 @@ router.post('/forgot-password', async (req, res) => {
         });
 
         await transporter.sendMail({
-            from: `"Vennila Accessories" <${process.env.SMTP_USER}>`,
+            from: `"Find a Part (FAP)" <${process.env.SMTP_USER}>`,
             to: email,
-            subject: 'Password Reset OTP - Vennila Accessories',
-            text: `Your OTP for password reset is: ${otp}. It is valid for 10 minutes.`
+            subject: `${otp} is your Password Reset OTP - Find a Part (FAP)`,
+            text: `Your OTP for password reset is: ${otp}. It is valid for 10 minutes.`,
+            html: `
+                <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 24px; border: 1px solid #e5e7eb; border-radius: 16px; background-color: #ffffff;">
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <h2 style="color: #00b894; margin: 0;">Find a Part (FAP)</h2>
+                        <p style="color: #6b7280; font-size: 13px; margin-top: 4px;">A product of Vennila Accessories</p>
+                    </div>
+                    <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 20px 0;" />
+                    <h3 style="color: #1f2937; margin-bottom: 8px;">Password Reset Request</h3>
+                    <p style="color: #4b5563; font-size: 14px; line-height: 20px;">
+                        We received a request to reset your password. Use the 6-digit OTP code below to complete your password reset:
+                    </p>
+                    <div style="text-align: center; margin: 28px 0;">
+                        <span style="font-size: 32px; font-weight: bold; letter-spacing: 8px; color: #00b894; background: #e6f7f4; padding: 12px 28px; border-radius: 12px; border: 1px dashed #00b894; display: inline-block;">${otp}</span>
+                    </div>
+                    <p style="color: #6b7280; font-size: 13px; text-align: center;">⏱️ This code is valid for <strong>10 minutes</strong>. If you did not request this, please ignore this email.</p>
+                    <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 24px 0 16px 0;" />
+                    <p style="color: #9ca3af; font-size: 11px; text-align: center;">&copy; 2026 Find a Part (FAP) &bull; Vennila Accessories</p>
+                </div>
+            `
         });
 
         console.log(`OTP sent via email for ${email}: ${otp}`);
