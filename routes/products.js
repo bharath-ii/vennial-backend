@@ -1,7 +1,7 @@
 const express = require('express');
 const { db } = require('../config/firebase');
 const { protect, authorize } = require('../middleware/auth');
-const { client } = require('../config/redis');
+const { client, ensureRedisConnected } = require('../config/redis');
 
 const router = express.Router();
 const productsCol = db.collection('products');
@@ -16,7 +16,8 @@ router.get('/', async (req, res) => {
 
         // Try to get from Redis (with fallback if Redis is down)
         try {
-            if (client.isOpen) {
+            await ensureRedisConnected();
+            if (client.isReady) {
                 const cachedProducts = await client.get(cacheKey);
                 if (cachedProducts) {
                     res.setHeader('X-Cache', 'HIT');
@@ -24,7 +25,7 @@ router.get('/', async (req, res) => {
                 }
             }
         } catch (redisError) {
-            console.error('Redis GET error:', redisError);
+            console.error('Redis GET error:', redisError.message);
         }
 
         res.setHeader('X-Cache', 'MISS');
@@ -53,11 +54,12 @@ router.get('/', async (req, res) => {
 
         // Save to Redis (expire in 1 hour)
         try {
-            if (client.isOpen) {
+            await ensureRedisConnected();
+            if (client.isReady) {
                 await client.setEx(cacheKey, 3600, JSON.stringify(products));
             }
         } catch (redisError) {
-            console.error('Redis SET error:', redisError);
+            console.error('Redis SET error:', redisError.message);
         }
 
         res.status(200).json(products);
@@ -84,10 +86,11 @@ router.post('/', async (req, res) => {
         const newProduct = { id: docRef.id, ...productData };
 
         // Clear cache in background (non-blocking)
-        if (client.isOpen) {
+        await ensureRedisConnected();
+        if (client.isReady) {
             client.keys('products_*')
                 .then(keys => { if (keys && keys.length > 0) return client.del(keys); })
-                .catch(err => console.error('Redis CACHE CLEAR error:', err));
+                .catch(err => console.error('Redis CACHE CLEAR error:', err.message));
         }
 
         res.status(201).json(newProduct);
@@ -105,10 +108,11 @@ router.put('/:id', async (req, res) => {
         await productsCol.doc(id).update(req.body);
 
         // Clear cache in background (non-blocking)
-        if (client.isOpen) {
+        await ensureRedisConnected();
+        if (client.isReady) {
             client.keys('products_*')
                 .then(keys => { if (keys && keys.length > 0) return client.del(keys); })
-                .catch(err => console.error('Redis CACHE CLEAR error:', err));
+                .catch(err => console.error('Redis CACHE CLEAR error:', err.message));
         }
 
         res.status(200).json({ success: true, message: 'Product updated' });
@@ -126,10 +130,11 @@ router.delete('/:id', async (req, res) => {
         await productsCol.doc(id).delete();
 
         // Clear cache in background (non-blocking)
-        if (client.isOpen) {
+        await ensureRedisConnected();
+        if (client.isReady) {
             client.keys('products_*')
                 .then(keys => { if (keys && keys.length > 0) return client.del(keys); })
-                .catch(err => console.error('Redis CACHE CLEAR error:', err));
+                .catch(err => console.error('Redis CACHE CLEAR error:', err.message));
         }
 
         res.status(200).json({ success: true, message: 'Product deleted' });

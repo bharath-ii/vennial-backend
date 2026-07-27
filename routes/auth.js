@@ -2,7 +2,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
-const { db } = require('../config/firebase');
+const { db, admin } = require('../config/firebase');
 
 const router = express.Router();
 const usersCol = db.collection('users');

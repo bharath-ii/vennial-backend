@@ -27,10 +27,25 @@ client.on('connect', () => console.log('Redis Client Connected'));
 
 const connectRedis = async () => {
     try {
-        await client.connect();
+        if (!client.isOpen) {
+            await client.connect();
+        }
     } catch (err) {
         console.error('Could not connect to Redis:', err.message || err);
     }
 };
 
-module.exports = { client, connectRedis };
+const ensureRedisConnected = async () => {
+    if (!client.isReady) {
+        try {
+            if (!client.isOpen) {
+                await client.connect();
+            }
+        } catch (e) {
+            console.error('Redis reconnect error:', e.message);
+        }
+    }
+    return client;
+};
+
+module.exports = { client, connectRedis, ensureRedisConnected };
